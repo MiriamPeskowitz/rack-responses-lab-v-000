@@ -12,19 +12,22 @@ class Application
   #
   #   resp.finish
   # end
+
+ 
+  @@items = ["Apples","Carrots","Pears"]
+ 
   def call(env)
-    @@items = ["Apples","Carrots","Pears"]
+    resp = Rack::Response.new
+    req = Rack::Request.new(env)
  
-      def call(env)
-        resp = Rack::Response.new
-        req = Rack::Request.new(env)
-     
-        @@items.each do |item|
-          resp.write "#{item}\n"
-        end
- 
-      resp.finish
+    if req.path.match(/items/)
+      @@items.each do |item|
+        resp.write "#{item}\n"
+      end
+    else
+      resp.write "Path Not Found"
     end
-
-
+ 
+    resp.finish
+  end
 end
